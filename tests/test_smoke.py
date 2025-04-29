@@ -12,10 +12,12 @@ created_password = "Test1234"
 def login(driver, username, password):
     wait = WebDriverWait(driver, 10)
     driver.get("https://bookcart.azurewebsites.net/")
+    time.sleep(0.5)
 
     login_button = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//span[@class='mdc-button__label' and normalize-space()='Login']")))
     login_button.click()
+    time.sleep(0.5)
 
     username_input = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//input[@formcontrolname='username']")))
@@ -25,8 +27,8 @@ def login(driver, username, password):
     password_input.send_keys(password)
     password_input.send_keys(Keys.ENTER)
 
-    # Wait for homepage
     wait.until(EC.url_to_be("https://bookcart.azurewebsites.net/"))
+    time.sleep(0.5)
 
 @pytest.mark.smoke
 def test_signup_success(driver):
@@ -34,15 +36,18 @@ def test_signup_success(driver):
 
     wait = WebDriverWait(driver, 10)
     driver.get("https://bookcart.azurewebsites.net/")
+    time.sleep(0.5)
 
     # Login > Register
     login_button = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//span[normalize-space()='Login']")))
     login_button.click()
+    time.sleep(0.5)
 
     signup_link = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//span[normalize-space()='Register']")))
     signup_link.click()
+    time.sleep(0.5)
 
     # Form
     first_name = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@formcontrolname='firstName']")))
@@ -52,12 +57,10 @@ def test_signup_success(driver):
     confirm_password_input = driver.find_element(By.XPATH, "//input[@formcontrolname='confirmPassword']")
     gender_male = wait.until(EC.element_to_be_clickable((By.XPATH, "//label[contains(., 'Male')]")))
 
-    # Generate random username
     random_number = str(int(time.time()))
     random_username = f"testuser{random_number}"
     created_username = random_username
 
-    # Input form + blur
     fields = [
         (first_name, "Test"),
         (last_name, "User"),
@@ -71,11 +74,11 @@ def test_signup_success(driver):
         field.clear()
         field.send_keys(value)
         driver.execute_script("arguments[0].blur();", field)
-        time.sleep(0.2)  # wait
+        time.sleep(0.3)
 
     gender_male.click()
+    time.sleep(0.3)
 
-    # Click Register
     register_button = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//button[.//span[normalize-space()='Register']]")))
     driver.execute_script("arguments[0].scrollIntoView(true);", register_button)
@@ -83,12 +86,9 @@ def test_signup_success(driver):
 
     time.sleep(2)
 
-    
     wait.until(EC.url_contains("/login"))
-    time.sleep(2)
     assert "/login" in driver.current_url
-    time.sleep(2)
-
+    time.sleep(1)
 
 @pytest.mark.smoke
 def test_login_success(driver):
@@ -98,6 +98,7 @@ def test_login_success(driver):
 
     user_profile_link = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//a[contains(., 'mesantest')]")))
+    time.sleep(0.5)
 
     assert "mesantest" in user_profile_link.text
 
@@ -110,6 +111,7 @@ def test_logout_success(driver):
     user_menu = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//a[contains(., 'mesantest')]")))
     user_menu.click()
+    time.sleep(0.5)
 
     logout_button = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//button//span[normalize-space()='Logout']")))
@@ -117,38 +119,33 @@ def test_logout_success(driver):
 
     wait.until(EC.url_contains("/login"))
     assert "/login" in driver.current_url
+    time.sleep(1)
 
-@pytest.mark.smoke
 @pytest.mark.smoke
 def test_add_and_clear_cart_success(driver):
     wait = WebDriverWait(driver, 10)
 
-    # Login
     login(driver, 'mesantest', 'StrongPassword1')
 
     add_to_cart_button = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]")
-    ))
+        (By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]")))
     driver.execute_script("arguments[0].click();", add_to_cart_button)
+    time.sleep(1)
 
     cart_icon = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//mat-icon[contains(text(),'shopping_cart')]")
-    ))
+        (By.XPATH, "//mat-icon[contains(text(),'shopping_cart')]")))
     driver.execute_script("arguments[0].click();", cart_icon)
+    time.sleep(1)
 
-    
     clear_cart_button = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//span[normalize-space()='Clear cart']")
-    ))
-
+        (By.XPATH, "//span[normalize-space()='Clear cart']")))
     driver.execute_script("arguments[0].click();", clear_cart_button)
 
     continue_shopping_button = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//span[normalize-space()='Continue shopping']")
-    ))
+        (By.XPATH, "//span[normalize-space()='Continue shopping']")))
+    time.sleep(0.5)
 
     assert continue_shopping_button.is_displayed()
-
     print("✅ Add to cart + Clear cart test passed successfully!")
 
 @pytest.mark.smoke
@@ -156,6 +153,7 @@ def test_search(driver):
     wait = WebDriverWait(driver, 10)
 
     driver.get("https://bookcart.azurewebsites.net/")
+    time.sleep(0.5)
 
     search_input = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//input[@placeholder='Search books or authors']")
@@ -163,6 +161,7 @@ def test_search(driver):
     search_input.click()
     search_input.clear()
     search_input.send_keys("Slayer")
+    time.sleep(0.5)
 
     suggestion = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//mat-option//span[contains(text(), 'Slayer')]")
@@ -173,19 +172,21 @@ def test_search(driver):
         (By.XPATH, "//a[@href='/books/details/21']")
     ))
     time.sleep(1)
-    
+
     assert driver.find_element(By.XPATH, "//a[@href='/books/details/21']").is_displayed()
-    time.sleep(2)
+    time.sleep(1)
 
 @pytest.mark.smoke
 def test_checkout_success(driver):
     wait = WebDriverWait(driver, 10)
 
-    # 1. Login
     driver.get("https://bookcart.azurewebsites.net/")
+    time.sleep(0.5)
+
     login_button = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//span[@class='mdc-button__label' and normalize-space()='Login']")))
     login_button.click()
+    time.sleep(0.5)
 
     username_input = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//input[@formcontrolname='username']")))
@@ -195,25 +196,24 @@ def test_checkout_success(driver):
     password_input.send_keys(Keys.ENTER)
 
     wait.until(EC.url_to_be("https://bookcart.azurewebsites.net/"))
+    time.sleep(0.5)
 
-    
     add_to_cart_button = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]")
-    ))
+        (By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]")))
     driver.execute_script("arguments[0].click();", add_to_cart_button)
+    time.sleep(0.5)
 
     cart_icon = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//mat-icon[contains(text(),'shopping_cart')]")
-    ))
+        (By.XPATH, "//mat-icon[contains(text(),'shopping_cart')]")))
     driver.execute_script("arguments[0].click();", cart_icon)
+    time.sleep(0.5)
 
     checkout_button = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//button[.//span[normalize-space()='CheckOut']]")
-    ))
+        (By.XPATH, "//button[.//span[normalize-space()='CheckOut']]")))
     driver.execute_script("arguments[0].scrollIntoView(true);", checkout_button)
     driver.execute_script("arguments[0].click();", checkout_button)
 
-
-    wait.until(EC.url_contains("/checkout"))  
+    wait.until(EC.url_contains("/checkout"))
+    time.sleep(1)
 
     assert "/checkout" in driver.current_url
