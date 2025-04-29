@@ -11,12 +11,9 @@
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/your-username/bookcart-qa-automation.git
+git clone https://github.com/EdinMesanovic/bookcart-qa-automation.git
 cd bookcart-qa-automation
 
-```bash
-git clone ...
-cd bookcart-qa-automation
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
