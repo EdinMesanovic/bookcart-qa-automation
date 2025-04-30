@@ -92,24 +92,24 @@ def test_signup_success(driver):
 
 @pytest.mark.smoke
 def test_login_success(driver):
-    login(driver, 'mesantest', 'StrongPassword1')
+    login(driver, 'testuserqa', 'StrongPassword1')
 
     wait = WebDriverWait(driver, 10)
 
     user_profile_link = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//a[contains(., 'mesantest')]")))
+        (By.XPATH, "//a[contains(., 'testuserqa')]")))
     time.sleep(0.5)
 
-    assert "mesantest" in user_profile_link.text
+    assert "testuserqa" in user_profile_link.text
 
 @pytest.mark.smoke
 def test_logout_success(driver):
-    login(driver, 'mesantest', 'StrongPassword1')
+    login(driver, 'testuserqa', 'StrongPassword1')
 
     wait = WebDriverWait(driver, 10)
 
     user_menu = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//a[contains(., 'mesantest')]")))
+        (By.XPATH, "//a[contains(., 'testuserqa')]")))
     user_menu.click()
     time.sleep(0.5)
 
@@ -125,7 +125,7 @@ def test_logout_success(driver):
 def test_add_and_clear_cart_success(driver):
     wait = WebDriverWait(driver, 10)
 
-    login(driver, 'mesantest', 'StrongPassword1')
+    login(driver, 'testuserqa', 'StrongPassword1')
 
     add_to_cart_button = wait.until(EC.element_to_be_clickable(
         (By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]")))
@@ -188,14 +188,8 @@ def test_checkout_success(driver):
     login_button.click()
     time.sleep(0.5)
 
-    username_input = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//input[@formcontrolname='username']")))
-    password_input = driver.find_element(By.XPATH, "//input[@formcontrolname='password']")
-    username_input.send_keys('mesantest')
-    password_input.send_keys('StrongPassword1')
-    password_input.send_keys(Keys.ENTER)
+    login(driver, 'testuserqa', 'StrongPassword1')
 
-    wait.until(EC.url_to_be("https://bookcart.azurewebsites.net/"))
     time.sleep(0.5)
 
     add_to_cart_button = wait.until(EC.element_to_be_clickable(

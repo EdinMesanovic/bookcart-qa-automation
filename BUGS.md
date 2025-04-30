@@ -1,32 +1,28 @@
-# Bug Report: No Feedback After Invalid Login Attempt
+# Bug Report:
 
 ## Title
 No feedback after invalid login attempt
 
 ## Environment
-- URL: [https://bookcart.azurewebsites.net/](https://bookcart.azurewebsites.net/)
-- Browser: Chrome (latest)
-- OS: macOS / Linux (tested on both)
+- URL: https://bookcart.azurewebsites.net/login  
+- Browser: Chrome (latest)  
+- OS: macOS / Linux  
 
-## Priority
-Medium
+## Priority: Medium
 
-## Steps to Reproduce
-1. Open the homepage.
-2. Click on the "Login" button.
-3. Enter an invalid username and password.
-4. Press Enter or click the "Login" button.
+## Steps to Reproduce 
+1. Go to homepage  
+2. Click "Login"  
+3. Enter wrong username/password  
+4. Click "Login" or press Enter  
 
-## Expected Result
-An error message like **"Invalid username or password"** should appear, informing the user that the login failed.
+## Expected 
+Error message (e.g. *"Invalid credentials"*) is shown.
 
-## Actual Result
-No error message is displayed.  
-The page remains unchanged, giving no feedback to the user.
+## Actual  
+Nothing happens — no feedback, no message.
 
-## Notes
-- This can confuse users and make them think the site is unresponsive.
-- Proper user feedback should be added for invalid login attempts.
+## Impact  
+User is left confused, unsure if login failed or the app is unresponsive.
 
-## Status
-Open
+## Status: Open
