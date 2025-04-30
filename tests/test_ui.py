@@ -71,7 +71,7 @@ def test_ui_pages_success(driver):
         (By.XPATH, "//input[@formcontrolname='username']")))
     password_input = driver.find_element(By.XPATH, "//input[@formcontrolname='password']")
 
-    username_input.send_keys("mesantest")  
+    username_input.send_keys("testuserqa")  
     password_input.send_keys("StrongPassword1")
     password_input.send_keys(Keys.ENTER)
 

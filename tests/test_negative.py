@@ -76,28 +76,34 @@ def test_checkout_form_validation(driver):
     wait = WebDriverWait(driver, 10)
 
     # Login
-    navigate_to_login(driver, wait)
-    wait.until(EC.presence_of_element_located((By.XPATH, "//input[@formcontrolname='username']"))).send_keys("mesantest")
+    driver.get("https://bookcart.azurewebsites.net/")
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Login']"))).click()
+    wait.until(EC.presence_of_element_located((By.XPATH, "//input[@formcontrolname='username']"))).send_keys("testuserqa")
     driver.find_element(By.XPATH, "//input[@formcontrolname='password']").send_keys("StrongPassword1", Keys.ENTER)
     wait.until(EC.url_to_be("https://bookcart.azurewebsites.net/"))
 
-    # Add to cart i checkout
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]"))).click()
+    # Add to cart and checkout
+    add_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]")))
+    driver.execute_script("arguments[0].click();", add_btn)
+
     wait.until(EC.element_to_be_clickable((By.XPATH, "//mat-icon[contains(text(),'shopping_cart')]"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='CheckOut']"))).click()
     wait.until(EC.url_contains("/checkout"))
 
     time.sleep(1)
-    # click blur
+
+    # Focus and blur all required fields to trigger validation
     for name in ["name", "addressLine1", "addressLine2", "pincode", "state"]:
         field = wait.until(EC.element_to_be_clickable((By.XPATH, f"//input[@formcontrolname='{name}']")))
         field.click()
         driver.execute_script("arguments[0].blur();", field)
         time.sleep(0.2)
 
+    # Attempt to submit
     place_order = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Place Order']")))
     driver.execute_script("arguments[0].click();", place_order)
 
+    # Assert validation messages
     for error_text in ["Name is required", "Address is required", "Pincode is required", "State is required"]:
         assert wait.until(EC.presence_of_element_located((By.XPATH, f"//mat-error[contains(text(), '{error_text}')]"))).is_displayed()
 
