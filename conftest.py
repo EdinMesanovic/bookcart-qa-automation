@@ -7,7 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 def driver():
     service = Service(ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
+    options.add_argument("--window-size=1280,800")
     driver = webdriver.Chrome(service=service, options=options)
     driver.implicitly_wait(10)
     yield driver

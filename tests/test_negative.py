@@ -77,3 +77,45 @@ def test_signup_mismatched_passwords(driver):
     time.sleep(2)
     assert "/register" in driver.current_url
     print("✅ Signup with mismatched passwords test passed successfully.")
+
+@pytest.mark.negative
+def test_checkout_form_validation(driver):
+    wait = WebDriverWait(driver, 10)
+
+    #  Login
+    driver.get("https://bookcart.azurewebsites.net/")
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Login']"))).click()
+
+    wait.until(EC.presence_of_element_located((By.XPATH, "//input[@formcontrolname='username']"))).send_keys("mesantest")
+    driver.find_element(By.XPATH, "//input[@formcontrolname='password']").send_keys("StrongPassword1", Keys.ENTER)
+
+    wait.until(EC.url_to_be("https://bookcart.azurewebsites.net/"))
+
+    #  Add to cart and go to checkout
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[contains(text(),'Add to Cart')]]"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//mat-icon[contains(text(),'shopping_cart')]"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='CheckOut']"))).click()
+
+    wait.until(EC.url_contains("/checkout"))
+    time.sleep(1)
+
+    field_names = ["name", "addressLine1", "addressLine2", "pincode", "state"]
+    for field_name in field_names:
+        input_field = wait.until(EC.element_to_be_clickable((By.XPATH, f"//input[@formcontrolname='{field_name}']")))
+        input_field.click()
+        driver.execute_script("arguments[0].blur();", input_field)
+        time.sleep(0.2)
+
+    place_order_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//span[normalize-space()='Place Order']")))
+    driver.execute_script("arguments[0].click();", place_order_btn)
+
+    error_texts = [
+        "Name is required",
+        "Address is required",
+        "Pincode is required",
+        "State is required"
+    ]
+    for error in error_texts:
+        assert wait.until(EC.presence_of_element_located((By.XPATH, f"//mat-error[contains(text(), '{error}')]"))).is_displayed()
+
+    print("✅ Negativni test za validaciju checkout forme uspješno prošao.")

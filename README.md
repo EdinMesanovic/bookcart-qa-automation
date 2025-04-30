@@ -4,7 +4,7 @@
 
 - Python 3.8+
 - Google Chrome browser
-- ChromeDriver (odgovarajuća verzija prema browseru)
+- ChromeDriver
 
 ## Project Overview
 Testing the demo e-commerce application:  
@@ -69,10 +69,5 @@ The goal is to validate the core user flows (smoke tests) and ensure that the ma
 
 4. Run the tests:
    ```bash
-    #Run all tests
-        pytest -v 
-    #Run smoke tests
-        pytest -m smoke 
-    #Run validation tests
-        pytest -m validation 
+    python run.py
    ```
