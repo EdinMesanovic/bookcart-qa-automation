@@ -36,7 +36,7 @@ def test_category_filter_and_price_slider(driver):
     ))
 
     actions = ActionChains(driver)
-    actions.click_and_hold(slider_thumb).move_by_offset(-170, 0).release().perform()
+    actions.click_and_hold(slider_thumb).move_by_offset(-200, 0).release().perform()
     time.sleep(2)
 
     print("✅ Price slider moved successfully!")
